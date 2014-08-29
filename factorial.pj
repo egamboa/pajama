@@ -1,0 +1,6 @@
+
+rule fact ( 10 ) {
+	case 0 -> 1
+  | case _ -> n*fact(n-1)
+} 
+
