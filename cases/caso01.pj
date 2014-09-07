@@ -1,0 +1,5 @@
+// Caso 1 (comentarios y constantes numericas)
+rule caso1(n){
+     case 0 -> false
+   | case 1 -> true
+}

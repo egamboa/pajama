@@ -1,0 +1,7 @@
+// Sumar las edades de una lista lp de personas mayores que un n (tres casos)
+
+rule sumaEdades([lp, n]){
+   case [[], _] -> 0
+  |case [[h when h.age>n | t], n] -> h.age + sumaEdades([t, n])
+  |case [[_|t], n] -> sumaEdades([t, n])
+}
