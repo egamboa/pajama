@@ -1,0 +1,6 @@
+// map en pajama. Asumiendo una funcion unshift
+// function unshift(a, x){a.unshift(x);return a;}
+rule map([a, f]){
+    case [[], _] -> []
+  | case [[ h | t], _] -> unshift(map([t, f]), f(h))
+}

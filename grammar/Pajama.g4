@@ -2,28 +2,41 @@ grammar Pajama;
 // loriacarlos@gmail.com EIF400 II-2014
 // START
 rules : ruleStatement+ ;
+
 // RULE
-ruleStatement : 'rule' ID formal '{' ruleBody  '}';
-formal            : '(' ID ')';
+ruleStatement : 'rule' ID formal '{' ruleBody  '}'
+;
+
+formal            : '(' ID ')'
+;
 ruleBody          : caseRule ('|' caseRule)*;
 caseRule          : 'case' pattern '->' expr  ;
 
 // PATTERN
 pattern  :   pattInit(pattRest)? 
            | '(' pattern ')';
-pattInit :            ID 
-                    | pattArray 
-					| pattObject 
-					| constant;
+pattInit :            ID  #Id
+                    | pattArray  #PArray
+					| pattObject #PObject
+					| pattConstant  #PCte
+;					
 pattRest :            '@' ID 
                     | 'when' expr
 					;
 pattArray         :  '[' pattList? ']';
-pattObject        :  '{' pattPair* '}';
+pattObject        :  '{' pattPair '}'
+;
+
+
 pattList : pattern (',' pattern)*;
 pattPair : key ':' pattern;
 
-
+pattConstant       : NUMBER  #PatNum
+                   | STRING  #PatString
+				   | 'true'  #PatTrue
+				   | 'false' #PatFalse
+				   | 'null'  #NullPat
+				   ;
 
 params   : '[' args ']';
 object   : '{' pairs? '}';
@@ -50,11 +63,11 @@ arithSingle    :     '-' arithOperation
 		           | constant 
 		         
 				   ;
-constant        :    NUMBER 
-                   | STRING
-				   | 'true'
-				   | 'false'
-				   | 'null' 
+constant        :    NUMBER  #ExprNum 
+                   | STRING  #ExprString 
+				   | 'true'  #ExprTrue
+				   | 'false' #ExprFalse
+				   | 'null'  #ExprNull
 				   ;
 args   :  expr (',' expr)*;
 
@@ -66,4 +79,7 @@ STRING : ('"' (~'"')* '"' );
 
 ID : [a-zA-Z][a-zA-Z_0-9]* ;
 // IGNORE
+CS : '//' .*? '\r'?'\n' -> skip;
 WS : [ \t\r\n]+ -> skip ;
+
+
