@@ -1,0 +1,5 @@
+// Sumar los elementos de un array
+rule sumar(a){
+     case [] -> 0
+   | case [h|t] -> h + sumar(t)
+}
