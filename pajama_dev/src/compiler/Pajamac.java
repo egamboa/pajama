@@ -15,9 +15,9 @@ public class Pajamac {
         InputStream is = System.in;
         if (inputFile!=null){
  		   is = new FileInputStream(inputFile);
-		   System.out.println("Reading from "+inputFile);
+		   System.err.println("Reading from "+inputFile);
 		} else{
-		   System.out.println("Reading from console (enter CTRL-Z+ENTER to finish");
+		   System.err.println("Reading from console (enter CTRL-Z+ENTER to finish");
 		}
         ANTLRInputStream input = new ANTLRInputStream(is);
         PajamaLexer lexer = new PajamaLexer(input);
@@ -25,7 +25,7 @@ public class Pajamac {
         PajamaParser parser = new PajamaParser(tokens);
         ParseTree tree = parser.rules(); 
         
-		System.out.println("Pajamac");
+		System.err.println("Pajamac");
 		Compiler comp = new Compiler();
 		comp.compile(tree);
 		comp.genCode();

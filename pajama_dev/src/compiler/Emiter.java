@@ -34,6 +34,9 @@ public interface Emiter{
    default JSAst OPERATION(JSAst oper, JSAst a, JSAst b){
       return new JSOperation(oper, a, b);
    }
+   default JSAst LOAD(String s){ return new JSLoad(s);}
+   default JSArray ARRAY(List<JSAst> args){ return new JSArray(args);}
+   default JSAccess ACCESS(JSAst a, JSAst k){return new JSAccess(a, k);}
    default JSAst RET(JSAst e){ return new JSReturn(e);}
    default JSAst OPER(String op){return new JSId(op);}
    final JSBool TRUE = new JSBool(true);
@@ -42,4 +45,5 @@ public interface Emiter{
    final JSId N = new JSId("n");
    final JSId C = new JSId("c");
    final JSId FAIL = new JSId("fail");
+   final JSId PATLIST = new JSId("patListTest");
 }

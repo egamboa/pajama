@@ -15,7 +15,7 @@ caseRule          : 'case' pattern '->' expr  ;
 // PATTERN
 pattern  :   pattInit(pattRest)? 
            | '(' pattern ')';
-pattInit :            ID  #Id
+pattInit :            ID  #PId
                     | pattArray  #PArray
 					| pattObject #PObject
 					| pattConstant  #PCte
@@ -56,13 +56,15 @@ arithOperation : arithMonom (('+' | '-')  arithMonom)*;
 arithMonom     : arithSingle (('*' | '/') arithSingle)*;
 arithSingle    :     '-' arithOperation
                    | '(' expr ')'
-				   | ID 
+				   | idSingle 
                    | arithSingle '(' args? ')' 
 		           | arithSingle ('.' ID)+ 
 				   | object
 		           | constant 
 		         
 				   ;
+idSingle : ID
+;
 constant        :    NUMBER  #ExprNum 
                    | STRING  #ExprString 
 				   | 'true'  #ExprTrue
