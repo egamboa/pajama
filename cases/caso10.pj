@@ -1,0 +1,6 @@
+// Crea un rango (array secuencial, acceso dot a expresion)
+
+rule rangeIterate([a, m, M]){
+    case [_, a, b when a>b] -> []
+  | case [a, m, M]          -> rangeIterate(a, m+1, M).push(m)
+}

@@ -1,0 +1,10 @@
+// Caso 2 factorial por patrones, array y recursivo de cola. Dos reglas
+
+rule factorialCola(a){
+     case [0,r] -> r
+   | case [m,r] ->  factorial([n-1, m*r])
+}
+rule factorial(n){
+      case n when n>=0 -> factorialCola([n, 1])
+	| case n -> 0
+}
