@@ -1,4 +1,4 @@
-|load('rt/util.js');
+load('rt/util.js');
 
 function foo(n) {
     return (function(x) {

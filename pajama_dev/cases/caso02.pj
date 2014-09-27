@@ -2,7 +2,7 @@
 
 rule factorialCola(a){
      case [0,r] -> r
-   | case [m,r] ->  factorial([n-1, m*r])
+   | case [m,r] ->  factorialCola([n-1, n*r])
 }
 rule factorial(n){
       case n when n>=0 -> factorialCola([n, 1])

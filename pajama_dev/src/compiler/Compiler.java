@@ -90,14 +90,13 @@ public class Compiler extends PajamaBaseVisitor<JSAst> implements Emiter{
    @Override
    public JSAst visitCaseRule(PajamaParser.CaseRuleContext ctx){
       symbolTable = new Hashtable<String, SymbolEntry>();
-	  stack = new Stack<Integer>();
-	  this.offset = 0;
-	  
+  	  stack = new Stack<Integer>();
+  	  this.offset = 0;
       JSAst p = visit(ctx.pattern());
-	  JSAst e = visit(ctx. expr());
-	  // function(n, c)if(p(n)) return e; else return c(n);
-	  return FUNCTION(FORMALS(N, C),
-	                  IF(APP(p, N), RET(e), RET(APP(C, N))));
+  	  JSAst e = visit(ctx. expr());
+  	  // function(n, c)if(p(n)) return e; else return c(n);
+  	  return FUNCTION(FORMALS(N, C),
+  	                  IF(APP(p, N), RET(e), RET(APP(C, N))));
    }
    @Override 
    public JSAst visitPatNum(PajamaParser.PatNumContext ctx){
@@ -113,18 +112,18 @@ public class Compiler extends PajamaBaseVisitor<JSAst> implements Emiter{
 	  List<JSAst> args = new ArrayList<JSAst>();
 	  ctx.pattArray()
 	     .pattList()
-		 .pattern()
-		 .stream()
-		 .forEach((p)->{
-		    JSAst vp = visit(p);
-		    if(vp != null) args.add(vp); 
-			this.offset++;
-		 });
-		 if(!stack.empty())
+		   .pattern()
+		   .stream()
+		   .forEach((p)->{
+		      JSAst vp = visit(p);
+		      if(vp != null) args.add(vp); 
+		    	 this.offset++;
+		    });
+		    if(!stack.empty())
            this.offset=stack.pop();
-		 else this.offset = 0;
+		    else this.offset = 0;
 	  
-      return FUNCTION(FORMALS(X), RET(APP(PATLIST, ARGS(ARRAY(args), X))));
+       return FUNCTION(FORMALS(X), RET(APP(PATLIST, ARGS(ARRAY(args), X))));
    }
    @Override 
    public JSAst visitPId(PajamaParser.PIdContext ctx){
