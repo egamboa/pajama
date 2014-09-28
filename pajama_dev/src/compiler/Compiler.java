@@ -158,8 +158,8 @@ public class Compiler extends PajamaBaseVisitor<JSAst> implements Emiter{
     JSAst a = monoms.get(0);
     JSAst point = monoms.stream()
                         .skip(1)
-                        .reduce(POINT(0, a), (z,m) -> {
-                          JSPoint p = (JSPoint) z;
+                        .reduce(POINT(0, a), (z, m) -> {
+                          JSPoint p = (JSPoint)z;
                           int k = p.index;
                           return POINT(p.add(1).index, OPERATION(opers.get(k), p.y, m));
                         });

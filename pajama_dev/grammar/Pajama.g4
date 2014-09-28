@@ -15,7 +15,8 @@ caseRule          : 'case' pattern '->' expr  ;
 // PATTERN
 pattern  :   pattInit(pattRest)? 
            | '(' pattern ')';
-pattInit :            ID  #PId
+pattInit :            ANY #Any
+					| ID  #PId
                     | pattArray  #PArray
 					| pattObject #PObject
 					| pattConstant  #PCte
@@ -79,14 +80,14 @@ constant        :    NUMBER  #ExprNum
 args   :  expr (',' expr)*;
 
 // LEXER
-
 NUMBER : INTEGER ('.' INTEGER)? ;
 fragment INTEGER : [0-9]+ ;
 STRING : ('"' (~'"')* '"' );
-
-ID : [a-zA-Z][a-zA-Z_0-9]* ;
+ID : [a-zA-Z][a-zA-Z_0-9]*;
+ANY : [^_$];
 // IGNORE
 CS : '//' .*? '\r'?'\n' -> skip;
+CSB : '/*' .*? '*/' -> skip;
 WS : [ \t\r\n]+ -> skip ;
 
 
