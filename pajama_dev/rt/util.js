@@ -8,5 +8,5 @@ function patListTest(lp, n)
  }
 
  function FUNCALL_TO_BE_DONE(){
- 	print("something needed to be done!!");
+ 	return "+ PENDING";
  }
