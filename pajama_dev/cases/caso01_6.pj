@@ -1,0 +1,4 @@
+rule foo(a){
+     case [0,r] -> r
+   
+}
