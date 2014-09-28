@@ -51,18 +51,20 @@ relMonom  : relOperation ('&&' relOperation)*;
 relOperation :      arithOperation ( relOperator arithOperation)*
                  | '!'  relOperation
 ;
-relOperator :	('>' | '<' | '==' | '<=' | '>=' | '!=');			
-arithOperation : arithMonom (('+' | '-')  arithMonom)*;
+relOperator :	('>' | '<' | '==' | '<=' | '>=' | '!=');
+
+arithOperation :  arithMonom (operAddPlus arithMonom)*;
 arithMonom     : arithSingle (('*' | '/') arithSingle)*;
-arithSingle    :     '-' arithOperation
-                   | '(' expr ')'
-				   | idSingle 
-                   | arithSingle '(' args? ')' 
-		           | arithSingle ('.' ID)+ 
-				   | object
-		           | constant 
-		         
-				   ;
+arithSingle    :     '-' arithOperation			#DecExpr
+                   | '(' expr ')'				#ParExpr
+                   | arithSingle '(' args? ')'  #FunCallExpr
+		           | arithSingle ('.' ID)+ 		#ObjectAccess
+				   | idSingle 					#idExpr
+				   | object 					#ObjectExpr
+		           | constant 					#ConstantExpr
+
+;
+
 idSingle : ID
 ;
 constant        :    NUMBER  #ExprNum 
