@@ -144,7 +144,36 @@ public class Compiler extends PajamaBaseVisitor<JSAst> implements Emiter{
 	  }
 	  return id;
 	}
-   
+
+  @Override
+  public JSAst visitArithOperation(PajamaParser.ArithOperationContext ctx){
+    List<JSId> opers = ctx.operAddPlus()
+                          .stream()
+                          .map((o)->(JSId)visit(o))
+                          .collect(Collectors.toList());
+    List<JSId> monoms = ctx.arithMonom()
+                          .stream()
+                          .map((m)->(JSId)visit(m))
+                          .collect(Collectors.toList());
+    JSAst a = monoms.get(0);
+    JSAst point = monoms.stream()
+                        .skip(1)
+                        .reduce(POINT(0, a), (z,m) -> {
+                          JSPoint p = (JSPoint) z;
+                          int k = p.index;
+                          return POINT(p.add(1).index, OPERATION(opers.get(k), p.y, m));
+                        });
+    return ((JSPoint)point).y;
+  }
+
+   @Override
+   public JSAst visitOperAddPlus(PajamaParser.OperAddPlusContext ctx){
+      return ID(ctx.op.getText());
+   }
+   @Override
+   public JSAst visitFunCallExpr(PajamaParser.FunCallExprContext ctx){
+      return TO_BE_DONE("FUNCALL_TO_BE_DONE");
+   }
    @Override
    public JSAst visitExprNum(PajamaParser.ExprNumContext ctx){
       return NUM(Integer.valueOf(ctx.NUMBER().getText()));
@@ -157,6 +186,5 @@ public class Compiler extends PajamaBaseVisitor<JSAst> implements Emiter{
    public JSAst visitExprFalse(PajamaParser.ExprFalseContext ctx){
       return FALSE;
    }
-   
 }
   
