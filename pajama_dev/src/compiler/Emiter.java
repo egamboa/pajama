@@ -39,6 +39,9 @@ public interface Emiter{
    default JSAccess ACCESS(JSAst a, JSAst k){return new JSAccess(a, k);}
    default JSAst RET(JSAst e){ return new JSReturn(e);}
    default JSAst OPER(String op){return new JSId(op);}
+   default JSPoint POINT(JSNum x, JSAst y){ return new JSPoint(x, y);}
+   default JSPoint POINT(int x, JSAst y){ return POINT(NUM(x),y);}
+   default JSAst TO_BE_DONE(String msg){return ID(msg+"()");}
    final JSBool TRUE = new JSBool(true);
    final JSBool FALSE = new JSBool(false);
    final JSId X = new JSId("x");
