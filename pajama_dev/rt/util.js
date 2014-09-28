@@ -6,3 +6,7 @@ function patListTest(lp, n)
  function fail(){
    throw new java.lang.Exception("Pattern matching failed");
  }
+
+ function FUNCALL_TO_BE_DONE(){
+ 	print("something needed to be done!!");
+ }
