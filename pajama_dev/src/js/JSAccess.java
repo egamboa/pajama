@@ -3,6 +3,7 @@ import java.io.*;
 public class JSAccess implements  JSAst{
    private JSAst left, right;
    public JSAst getLeft(){return this.left;}
+   public JSAst getRight(){return this.right;}
    public JSAccess setLeft(JSAst left){
       this.left = left;
 	  return this;

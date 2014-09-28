@@ -10,8 +10,7 @@ public class JSOperation implements  JSAst{
    }
    @Override
    public void genCode(PrintStream out){
-      
-	  out.print("(");
+      out.print("(");
 	  left.genCode(out);
       oper.genCode(out);
 	  right.genCode(out);
