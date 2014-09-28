@@ -67,6 +67,9 @@ arithSingle    :     '-' arithOperation			#DecExpr
 
 idSingle : ID
 ;
+
+operAddPlus : op=('+' | '-')
+;
 constant        :    NUMBER  #ExprNum 
                    | STRING  #ExprString 
 				   | 'true'  #ExprTrue
