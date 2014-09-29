@@ -151,7 +151,7 @@ public class Compiler extends PajamaBaseVisitor<JSAst> implements Emiter{
                           .stream()
                           .map((o)->(JSId)visit(o))
                           .collect(Collectors.toList());
-    List<JSId> monoms = ctx.arithMonom()
+    List<JSAst> monoms = ctx.arithMonom()
                           .stream()
                           .map((m)->(JSId)visit(m))
                           .collect(Collectors.toList());

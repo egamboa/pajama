@@ -11,7 +11,7 @@ Pendientes:
 
 - [x] Casa01_5.js
 - [x] Casa01_7.js
-- [ ] JSId Error to JSPoint
+- [x] JSId Error to JSPoint
 - [ ] Falta el _ para compartamiento default
 - [ ] Falta el pipe para acceso de arrays
 - [ ] g(x) para el caso01_7
