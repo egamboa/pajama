@@ -1,6 +1,0 @@
-// Agrega un property a un objeto solo si esta vacio. Acceso de array a object
-
-rule addProperty([o, k, v]){
-     case [{}, _] -> o[k] = v
-   | case  _  -> o
-}

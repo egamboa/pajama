@@ -1,6 +1,0 @@
-// Caso 3 Patron head-tail en Array con wild_card
-
-rule size(a){
-   case [[], s] -> s
-   case [[_|t], s] -> size(t, s+1)
-}

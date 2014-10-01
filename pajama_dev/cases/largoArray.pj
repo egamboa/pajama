@@ -1,0 +1,20 @@
+no rc
+
+rule largo(a){
+	case[]->0
+	case [_|r]->largo(r)+1
+}
+
+si rc
+
+rule largoRC(a){
+	case[[],c]->c
+	| case[[_|r],c]->largoRC([r,c+1])
+}
+
+rule largo(a){
+	case a -> largoRC([a,0])
+}
+
+ejemplo
+sumar elementos de una lista

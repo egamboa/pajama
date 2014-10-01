@@ -1,0 +1,6 @@
+
+rule fact ( n ) {
+    case n when n==0 -> 1
+  | case n -> n*fact(n-1)	
+   
+} 

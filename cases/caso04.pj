@@ -1,5 +1,0 @@
-// Producto del primero y tercero de un array de tres elementos
-rule times13(a){
-   case [x, _, y] -> x*y
-   | case _ -> 0
-}
