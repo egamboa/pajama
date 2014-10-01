@@ -13,17 +13,3 @@ pajama_dev/src/antlr/PajamaLexer.java
 pajama_dev/src/antlr/PajamaBaseVisitor.java
 
 pajama_dev/src/antlr/PajamaLexer.tokens
-
-src/antlr/Pajama.tokens
-
-src/antlr/PajamaBaseVisitor.java
-
-src/antlr/PajamaLexer.tokens
-
-src/antlr/PajamaParser.java
-
-src/antlr/PajamaVisitor.java
-
-grammar/Pajama.g4
-
-cases/factorial.pj
