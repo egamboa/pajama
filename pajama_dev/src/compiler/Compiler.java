@@ -153,7 +153,7 @@ public class Compiler extends PajamaBaseVisitor<JSAst> implements Emiter{
                           .collect(Collectors.toList());
     List<JSAst> monoms = ctx.arithMonom()
                           .stream()
-                          .map((m)->(JSId)visit(m))
+                          .map((m)->visit(m))
                           .collect(Collectors.toList());
     JSAst a = monoms.get(0);
     JSAst point = monoms.stream()
@@ -172,7 +172,10 @@ public class Compiler extends PajamaBaseVisitor<JSAst> implements Emiter{
    }
    @Override
    public JSAst visitFunCallExpr(PajamaParser.FunCallExprContext ctx){
-      return TO_BE_DONE("FUNCALL_TO_BE_DONE");
+    //1 visitar arithsingle y guardar en un jsAst
+    //2 visitar args().expr()
+    //3 visit expr visitandolos y guardandolos en una lista
+      return FUNCALL(#1, #3);
    }
    @Override
    public JSAst visitExprNum(PajamaParser.ExprNumContext ctx){
@@ -186,5 +189,6 @@ public class Compiler extends PajamaBaseVisitor<JSAst> implements Emiter{
    public JSAst visitExprFalse(PajamaParser.ExprFalseContext ctx){
       return FALSE;
    }
+
 }
   

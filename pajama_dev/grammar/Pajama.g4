@@ -14,7 +14,8 @@ caseRule          : 'case' pattern '->' expr  ;
 
 // PATTERN
 pattern  :   pattInit(pattRest)? 
-           | '(' pattern ')';
+           | '(' pattern ')'
+;
 pattInit :            ANY #Any
 					| ID  #PId
                     | pattArray  #PArray
@@ -24,11 +25,11 @@ pattInit :            ANY #Any
 pattRest :            '@' ID 
                     | 'when' expr
 					;
-pattArray         :  '[' pattList? ']';
+pattArray         :  '[' pattList? pipeRest?']'; //pulga pattList puede no venir
 pattObject        :  '{' pattPair '}'
 ;
 
-
+pipeRest : '|' (pattArray|ID);
 pattList : pattern (',' pattern)*;
 pattPair : key ':' pattern;
 
@@ -37,7 +38,7 @@ pattConstant       : NUMBER  #PatNum
 				   | 'true'  #PatTrue
 				   | 'false' #PatFalse
 				   | 'null'  #NullPat
-				   ;
+;
 
 params   : '[' args ']';
 object   : '{' pairs? '}';
@@ -46,7 +47,7 @@ pair     : key ':' expr;
 key      : STRING | ID;
 
 // EXPRESSION
-expr      : relMonom ('||' relMonom)*;
+expr      : relMonom ('|' relMonom)*;
 relMonom  : relOperation ('&&' relOperation)*;
 
 relOperation :      arithOperation ( relOperator arithOperation)*
@@ -84,7 +85,7 @@ NUMBER : INTEGER ('.' INTEGER)? ;
 fragment INTEGER : [0-9]+ ;
 STRING : ('"' (~'"')* '"' );
 ID : [a-zA-Z][a-zA-Z_0-9]*;
-ANY : [^_$];
+ANY : '_' -> skip;
 // IGNORE
 CS : '//' .*? '\r'?'\n' -> skip;
 CSB : '/*' .*? '*/' -> skip;

@@ -1,0 +1,3 @@
+rule factorialCola(a){
+     case [0,r] -> foo(r,1)
+}
