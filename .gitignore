@@ -13,3 +13,4 @@ pajama_dev/src/antlr/PajamaLexer.java
 pajama_dev/src/antlr/PajamaBaseVisitor.java
 
 pajama_dev/src/antlr/PajamaLexer.tokens
+pajama_dev/cases/caso01_6_OLD.pj
