@@ -1,7 +1,7 @@
 package pajama.js;
 import java.io.*;
 import java.util.*;
-public class JSFuncall implements  JSAst{
+public class JSFuncall implements JSAst{
    private JSAst fun;
    List<JSAst> args;
    public JSAst getFun(){return this.fun;}
@@ -9,7 +9,7 @@ public class JSFuncall implements  JSAst{
    
    
    public JSFuncall(JSAst fun, List<JSAst> args){
-      this.fun = fun;
+     this.fun = fun;
 	  this.args = args;
    }
    @Override

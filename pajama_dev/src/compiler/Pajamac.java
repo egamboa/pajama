@@ -29,6 +29,5 @@ public class Pajamac {
 		Compiler comp = new Compiler();
 		comp.compile(tree);
 		comp.genCode();
-		
     }
 }

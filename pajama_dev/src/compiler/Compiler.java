@@ -112,14 +112,14 @@ public class Compiler extends PajamaBaseVisitor<JSAst> implements Emiter{
 	  this.offset=0;
 	  List<JSAst> args = new ArrayList<JSAst>();
 	  ctx.pattArray()
-	     .pattList()
-		 .pattern()
-		 .stream()
-		 .forEach((p)->{
+  	   .pattList()
+  		 .pattern()
+  		 .stream()
+  		 .forEach((p)->{
 		    JSAst vp = visit(p);
 		    if(vp != null) args.add(vp); 
-			this.offset++;
-		 });
+    			this.offset++;
+    		});
 		 if(!stack.empty())
            this.offset=stack.pop();
 		 else this.offset = 0;
@@ -172,11 +172,15 @@ public class Compiler extends PajamaBaseVisitor<JSAst> implements Emiter{
    }
    @Override
    public JSAst visitFunCallExpr(PajamaParser.FunCallExprContext ctx){
-    //1 visitar arithsingle y guardar en un jsAst
-    //2 visitar args().expr()
-    //3 visit expr visitandolos y guardandolos en una lista
-    // return FUNCALL(#1, #3);
-    return TO_BE_DONE("FUNCALL_TO_BE_DONE");
+    JSAst fun = visit(ctx.arithSingle());
+    List<JSAst> args = new ArrayList<JSAst>();
+    //IF(args != NULL)
+    ctx.args().expr()
+       .stream()
+       .forEach((arg) -> {
+          args.add(visit(arg));
+        });
+    return FUNCCALL(fun, args);
    }
    @Override
    public JSAst visitExprNum(PajamaParser.ExprNumContext ctx){

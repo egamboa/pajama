@@ -27,6 +27,9 @@ public interface Emiter{
        return new JSApply(f, args);
    }
    default List<JSAst> ARGS(JSAst... args){ return Arrays.asList(args);}
+
+   //default List<JSAst> ARGS(List<JSAst> args){ return args;}
+
    default List<JSAst> FORMALS(JSAst... args){ return Arrays.asList(args);}
    default JSAst EQ(JSAst a, JSAst b){
       return OPERATION(OPER("==="), a, b);
@@ -41,7 +44,7 @@ public interface Emiter{
    default JSAst OPER(String op){return new JSId(op);}
    default JSPoint POINT(JSNum x, JSAst y){ return new JSPoint(x, y);}
    default JSPoint POINT(int x, JSAst y){ return POINT(NUM(x),y);}
-   default JSAst TO_BE_DONE(String msg){return ID(msg+"()");}
+   default JSAst FUNCCALL(JSAst fun, List<JSAst> args){return new JSFuncall(fun, args);}
    final JSBool TRUE = new JSBool(true);
    final JSBool FALSE = new JSBool(false);
    final JSId X = new JSId("x");
