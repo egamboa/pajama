@@ -5,14 +5,18 @@ function foo(n) {
         return (function(n, c) {
             if ((function(x) {
                 return (patListTest)([function(x) {
+                    print(x[0] === 0);
                     return (x[0] === 0);
                 }, function(x) {
                     return (patListTest)([function(x) {
+                        print(x[1][0] === 10);
                         return (x[1][0] === 10);
                     }, function(x) {
+                        print(x[1][1] === 11);
                         return (x[1][1] === 11);
                     }], x);
                 }, function(x) {
+                    print(x[2] === 2);
                     return (x[2] === 2);
                 }, function(x) {
                     return (patListTest)([function(x) {
@@ -23,4 +27,4 @@ function foo(n) {
             else return (c)(n);
         })(x, fail);
     })(n);
-}s
+}

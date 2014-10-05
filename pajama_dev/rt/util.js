@@ -2,8 +2,10 @@ function patListTest(lp, n)
    Array.isArray(n)
    && n.length == lp.length
    && lp.reduce(function(z, p) z && p(n), true)
+   
 function patListTestEmpty(x)
    Array.isArray(x) && x.length==0;
+
  var FAIL=new java.lang.Exception("Pattern matching failed");
  function fail(){
    throw FAIL;
