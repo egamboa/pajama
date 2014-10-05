@@ -128,10 +128,10 @@ public class Compiler extends PajamaBaseVisitor<JSAst> implements Emiter{
    @Override 
    public JSAst visitPatNum(PajamaParser.PatNumContext ctx){
       JSAst n = NUM(Integer.valueOf(ctx.NUMBER().getText()));
-	  return FUNCTION(FORMALS(X), RET(EQ(locate(X), n))); //function(x)x===n;
+	  return FUNCTION(FORMALS(X), RET(EQ(locate(X), n)));
    }
    @Override
-   public JSAst visitExprSring(PajamaParser.ExprTStringContext ctx){
+   public JSAst visitExprString(PajamaParser.ExprStringContext ctx){
       return STRING(ctx.STRING().getText());
    }   
    @Override 
@@ -185,7 +185,7 @@ public class Compiler extends PajamaBaseVisitor<JSAst> implements Emiter{
    @Override 
    public JSAst visitPArray(PajamaParser.PArrayContext ctx){
       System.err.println("visitPArray:");
-      return visit(ctx.visitPArray());
+      return visit(ctx.pattArray());
       /*if(this.offset!=0) this.stack.push(this.offset);
 	  this.offset=0;
 	  List<JSAst> args = new ArrayList<JSAst>();
