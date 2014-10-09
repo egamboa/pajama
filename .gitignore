@@ -1,7 +1,6 @@
 *.class
 .DS_Store
 *.sh
-pajama_dev/*.js
 pajama_dev/src/antlr/
 pajama_dev/src/antlr/PajamaParser.java
 

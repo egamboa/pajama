@@ -6,11 +6,32 @@ function MyException(msg, fail){
 
 MyException.prototype.toString = function()this.msg;
 
-
-function patListTest(lp, n)
-	Array.isArray(n)
-	&& n.length == lp.length
-	&& lp.reduce(function(z, p) z && p(n), false)
+var aux = 0;
+function patListTest(lp, n){
+	aux++;
+	print('TESTING patListTest'+aux);
+	print('============== LP ===============');
+	print(lp.length);
+	print(lp);
+	print('============== N ===============');
+	print(n.length);
+	print(n);
+	print('============== Casos ==============='+aux);
+	if (n.length != lp.length) {
+		print('============== End Caso 1 ==============='+aux);
+		return false;
+	}
+	if(!Array.isArray(n)){
+		print('============== End Caso 2 ==============='+aux);
+		return false;
+	}
+	if(!lp.reduce(function(z, p) z && p(n), true)){
+		print('============== End Caso 3 ==============='+aux);
+		return false;
+	}
+	return true;
+	print('============== End ===============');
+}
 
 
 function patListTestEmpty(x)
@@ -18,7 +39,7 @@ function patListTestEmpty(x)
 
 
 function fail(){
-	throw new FAIL;
+	throw new java.lang.Exception("Pattern matching failed");
 }
 
 
