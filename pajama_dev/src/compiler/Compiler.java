@@ -39,37 +39,55 @@ public class Compiler extends PajamaBaseVisitor<JSAst> implements Emiter{
    
    public JSAst locate(JSId x){
        
-       SymbolEntry entry = symbolTable.get(x.getValue());
-	   List<JSAst> rstack =  new ArrayList<>();
-	   for(Integer k : stack){
-	      rstack.add(NUM(k));
-	   }
-	   JSAst a = x;
-	   JSNum off = NUM(this.offset);
-	   for(JSAst k : rstack)
+      if(this.offset<0) return x;
+      SymbolEntry entry = symbolTable.get(x.getValue());
+      List<JSAst> rstack =  new ArrayList<>();
+      for(Integer k : stack){
+        rstack.add(NUM(k));
+      }
+      JSAst a = x;
+      JSNum off = NUM(this.offset);
+      for(JSAst k : rstack)
         a = ACCESS(a, k);
-	   a = ACCESS(a, off);
-	   SymbolEntry e = new SymbolEntry(x, off, (JSAccess)a);
-	   symbolTable.put(x.getValue(), e);
-	   return a;
+      a = ACCESS(a, off);
+      SymbolEntry e = new SymbolEntry(x, off, (JSAccess)a);
+      symbolTable.put(x.getValue(), e);
+      return a;
 	   
+   }
+   public SymbolEntry resetAccess(JSId x, JSAccess a){
+      SymbolEntry e = new SymbolEntry(x, NULL_OFFSET, a);
+      symbolTable.put(x.getValue(), e);
+      return e;
    }
    public String PATH ="rt/util.js";
    public void genCode(){
       LOAD(PATH).genCode();
       rules.stream().forEach((t)->t.genCode());
    }
-   public JSAst compile(ParseTree tree){
+   public JSAst compile(ParseTree tree){ 
       return visit(tree);
    }
    @Override
    public JSAst visitRuleStatement(PajamaParser.RuleStatementContext ctx){
       JSId id = ID(ctx.ID().getText());
-	  JSAst formal = visit(ctx.formal());
-	  JSAst body = visit(ctx.ruleBody());
-	  JSAst frule = FUNCTION(id, formal, RET(APP(body, formal )));
-	  rules.add(frule);
-	  return frule;
+  	  JSAst formal = visit(ctx.formal());
+  	  JSAst body = visit(ctx.ruleBody());
+  	  JSAst frule = FUNCTION(id, formal, RET(APP(body, formal )));
+  	  rules.add(frule);
+  	  return frule;
+   }
+   @Override
+   public JSAst visitTestStatement(PajamaParser.TestStatementContext ctx){
+      System.err.println("visitTestStatement:");
+      JSAst fun = ID(ctx.ID().getText());
+      List<JSAst> args = ctx.args().expr()
+                                   .stream()
+                                   .map((t)->visit(t))
+                                   .collect(Collectors.toList());
+      JSAst fc = STATEMENT_FUNCALL(fun, args);
+      rules.add(fc);
+      return fc;
    }
    @Override
    public JSAst visitFormal(PajamaParser.FormalContext ctx){
@@ -78,37 +96,97 @@ public class Compiler extends PajamaBaseVisitor<JSAst> implements Emiter{
    @Override
    public JSAst visitRuleBody(PajamaParser.RuleBodyContext ctx){
       List<JSAst> fcases = ctx.caseRule().stream()
-	                                     .map((c) -> visit(c))
-										 .collect(Collectors.toList());
-	  Collections.reverse(fcases);
+	                                       .map((c) -> visit(c))
+										                     .collect(Collectors.toList());
+	    Collections.reverse(fcases);
 	  
-	  return fcases.stream()
-				   .reduce(FAIL, (z, fc)->
+	    return fcases.stream()
+				           .reduce(FAIL, (z, fc)->
 	                              FUNCTION(FORMALS(X), RET(APP(fc, ARGS(X,z)))));
 	                
    }
    @Override
    public JSAst visitCaseRule(PajamaParser.CaseRuleContext ctx){
       symbolTable = new Hashtable<String, SymbolEntry>();
-	  stack = new Stack<Integer>();
-	  this.offset = 0;
+  	  stack = new Stack<Integer>();
+  	  this.offset = -1;
 	  
       JSAst p = visit(ctx.pattern());
-	  JSAst e = visit(ctx. expr());
-	  // function(n, c)if(p(n)) return e; else return c(n);
-	  return FUNCTION(FORMALS(N, C),
-	                  IF(APP(p, N), RET(e), RET(APP(C, N))));
+  	  JSAst e = visit(ctx. expr());
+  	  // function(n, c)if(p(n)) return e; else return c(n);
+  	  return FUNCTION(FORMALS(N, C),
+	                   IF(APP(p, N), RET(e), RET(APP(C, N))));
+   }
+   @Override 
+   public JSAst visitPattern(PajamaParser.PatternContext ctx){
+      System.err.println("visitPattern:");
+      JSAst pi = visit(ctx.pattInit());
+      if(ctx.pattRest()==null) return pi;
+      JSAst pr = visit(ctx.pattRest());
+      return FUNCTION(FORMALS(X), RET(AND(APP(pi, X), APP(pr, X))));
    }
    @Override 
    public JSAst visitPatNum(PajamaParser.PatNumContext ctx){
       JSAst n = NUM(Integer.valueOf(ctx.NUMBER().getText()));
-	  return FUNCTION(FORMALS(X), RET(EQ(locate(X), n))); //function(x)x===n;
+	  return FUNCTION(FORMALS(X), RET(EQ(locate(X), n)));
    }
-   
+   @Override
+   public JSAst visitExprString(PajamaParser.ExprStringContext ctx){
+      return STRING(ctx.STRING().getText());
+   }   
+   @Override 
+   public JSAst visitPattArray(PajamaParser.PattArrayContext ctx){
+      System.err.println("visitPattArray:");
+      return visit(ctx.pattListOrEmpty());
+   }   
+   @Override 
+   public JSAst visitPattListOrEmpty(PajamaParser.PattListOrEmptyContext ctx){
+      System.err.println("visitPattListOrEmpty:");
+      if(ctx.pattList()==null) return visit(ctx.pattEmpty());
+      return visit(ctx.pattList());
+   }   
+   @Override 
+   public JSAst visitPattEmpty(PajamaParser.PattEmptyContext ctx){
+      System.err.println("visitPattEmpty:");
+      return EMPTY_PREDICATE();
+   }   
+   @Override 
+   public JSAst visitPattList(PajamaParser.PattListContext ctx){
+      System.err.println("visitPattList:");
+      int lastOffset = this.offset;
+      if(this.offset > 0) this.stack.push(this.offset);
+      this.offset = 0;
+      List<JSAst> args = new ArrayList<JSAst>();
+      ctx.pattern()
+         .stream()
+         .forEach((p)->{
+           JSAst vp = visit(p);
+           if(vp != null) args.add(vp);
+           this.offset++;
+         });
+      int restOffset = this.offset;
+      if(!stack.empty())
+         this.offset = stack.pop();
+      else this.offset = lastOffset;
+      
+      JSAst predicateFirstPart = APP(PATLIST, ARGS(ARRAY(args), X));
+      JSAst predicateRestPart, predicateComplete;
+      if(ctx.pattRestArray() != null){
+         predicateRestPart = visit(ctx.pattRestArray());
+         JSAccess a = SLICE(X, NUM(restOffset));
+         resetAccess(X, a);
+         predicateComplete = AND(predicateFirstPart,
+                                APP(predicateRestPart, a));
+      }
+      else predicateComplete = predicateFirstPart;
+      return FUNCTION(FORMALS(X), RET(predicateComplete));
+   } 
    
    @Override 
    public JSAst visitPArray(PajamaParser.PArrayContext ctx){
-      if(this.offset!=0) this.stack.push(this.offset);
+      System.err.println("visitPArray:");
+      return visit(ctx.pattArray());
+      /*if(this.offset!=0) this.stack.push(this.offset);
 	  this.offset=0;
 	  List<JSAst> args = new ArrayList<JSAst>();
 	  ctx.pattArray()
@@ -125,6 +203,16 @@ public class Compiler extends PajamaBaseVisitor<JSAst> implements Emiter{
 		 else this.offset = 0;
 	  
       return FUNCTION(FORMALS(X), RET(APP(PATLIST, ARGS(ARRAY(args), X))));
+    */
+   }
+   @Override
+   public JSAst visitPattRestArray(PajamaParser.PattRestArrayContext ctx){
+      System.err.println("visitPattRestArray:");
+      if(ctx.pattArray()!=null)
+        return visit(ctx.pattArray());
+      JSId id = ID(ctx.ID().getText());
+      locate(id);
+      return  FUNCTION(FORMALS(X), RET(TRUE));
    }
    @Override 
    public JSAst visitPId(PajamaParser.PIdContext ctx){
@@ -176,7 +264,15 @@ public class Compiler extends PajamaBaseVisitor<JSAst> implements Emiter{
     //2 visitar args().expr()
     //3 visit expr visitandolos y guardandolos en una lista
     // return FUNCALL(#1, #3);
-    return TO_BE_DONE("FUNCALL_TO_BE_DONE");
+    JSAst fun = visit(ctx.arithSingle());
+    List<JSAst> args = new ArrayList<JSAst>();
+    //IF(args != NULL)
+    ctx.args().expr()
+       .stream()
+       .forEach((arg) -> {
+          args.add(visit(arg));
+        });
+    return FUNCALL(fun, args);
    }
    @Override
    public JSAst visitExprNum(PajamaParser.ExprNumContext ctx){

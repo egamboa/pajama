@@ -1,6 +1,5 @@
-function fail(){
-   throw new java.lang.Exception();
-}
+load('rt/util.js');
+
 function caso1(n) {
     return (function(x) {
         return (function(n, c) {

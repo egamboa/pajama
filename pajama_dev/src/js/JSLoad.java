@@ -8,7 +8,6 @@ public class JSLoad implements JSAst{
    }
    @Override
    public void genCode(PrintStream out){
-   
       out.print("load('");
 	  out.print(p);
 	  out.print("');");

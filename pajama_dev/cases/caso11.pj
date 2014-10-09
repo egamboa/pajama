@@ -1,0 +1,10 @@
+// @ para ponerle nombre a un patron
+
+rule second(a){
+    case [_,_|_]@x -> x[1]
+  
+}
+
+expectEQ("second([1,2,3])", "2");
+expectFAIL("second([1])");
+expectFAIL("second([])");

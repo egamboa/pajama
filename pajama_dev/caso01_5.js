@@ -17,10 +17,10 @@ function foo(n) {
                 }, function(x) {
                     return (patListTest)([function(x) {
                         return true;
-                    }], x);
+                    }], x);	
                 }], x);
             })(n)) return x[3][0];
             else return (c)(n);
         })(x, fail);
     })(n);
-}s
+}
