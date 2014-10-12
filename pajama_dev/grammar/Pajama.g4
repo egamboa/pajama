@@ -67,13 +67,15 @@ relOperator 		: ('>' | '<' | '==' | '<=' | '>=' | '!=');
 arithOperation 		: arithMonom (operAddPlus arithMonom)*;
 arithMonom     		: arithSingle (('*' | '/') arithSingle)*;
 arithSingle    		:  '-' arithOperation			#DecExpr
+					 | funInit					 	#FunCallExpr
                    	 | '(' expr ')'					#ParExpr
-                   	 | arithSingle '(' args? ')' 	#FunCallExpr
 		           	 | arithSingle ('.' ID)+ 		#ObjectAccess
 				   	 | idSingle 					#idExpr
 				   	 | object 						#ObjectExpr
 		           	 | constant 					#ConstantExpr
-
+;
+funInit : idSingle '(' args? ')'
+		| idSingle '(' pattArray? ')'
 ;
 
 idSingle : ID

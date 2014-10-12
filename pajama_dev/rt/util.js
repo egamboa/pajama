@@ -18,15 +18,15 @@ function patListTest(lp, n){
 	print(n);
 	print('============== Casos ==============='+aux);
 	if (n.length != lp.length) {
-		print('============== End Caso 1 ==============='+aux);
+		print('============== Fail Caso 1 ==============='+aux);
 		return false;
 	}
 	if(!Array.isArray(n)){
-		print('============== End Caso 2 ==============='+aux);
+		print('============== Fail Caso 2 ==============='+aux);
 		return false;
 	}
 	if(!lp.reduce(function(z, p) z && p(n), true)){
-		print('============== End Caso 3 ==============='+aux);
+		print('============== Fail Caso 3 ==============='+aux);
 		return false;
 	}
 	return true;
