@@ -34,15 +34,49 @@ public class Compiler extends PajamaBaseVisitor<JSAst> implements Emiter{
 
    List<JSAst> rules = new ArrayList<>();
    Map<String, SymbolEntry> symbolTable;
-   Stack<Integer> stack = new Stack<>();
+   Stack<JSAst> stack = new Stack<>();
+   public boolean isEmpty(){return this.stack.empty();}
+   public void push(int x){this.stack.push(NUM(x));}
+   public void push(JSAccess x ){this.stack.push(x);}
+   public JSAst pop(){return this.stack.pop();}
    int offset =0;
+   JSId ruleName;
    
+  public jsAst locatePatternId(JSId x){
+    System.err.println("licatePatternId:" x.getValue()+" "+stack+ " " +this.offset);
+    if(this.offset < 0){
+      return locateOnTopLevel();
+    }
+    locate(x);
+    JSNum off = NUM(this.offset);
+    JSAccess a = ACCESS(x,off);
+    return a;
+  } 
+
    public JSAst locate(JSId x){
-       
+      System.err.println("locate:"+ x.getValue()+" "+stack+ " " +this.offset);
+
       if(this.offset<0) return x;
       SymbolEntry entry = symbolTable.get(x.getValue());
       List<JSAst> rstack =  new ArrayList<>();
-      for(Integer k : stack){
+      for(JSAst k : stack){
+        rstack.add(k);
+      }
+      JSAst a = x;
+      JSNum off = NUM(this.offset);
+      for(JSAst k : rstack){
+        if(k instanceof JSAccess){
+          JSAccess na = (JSAccess)k;
+          a = na.setLeft(a);
+        }
+        else a =ACCESS(a,k);
+      }
+      a = ACCESS(a, off);
+      SymbolEntry e = new SymbolEntry(x, off, (JSAccess)a);
+      symbolTable.put(x.getValue(), e);
+      return a
+      
+      /*for(Integer k : stack){
         rstack.add(NUM(k));
       }
       JSAst a = x;
@@ -53,8 +87,25 @@ public class Compiler extends PajamaBaseVisitor<JSAst> implements Emiter{
       SymbolEntry e = new SymbolEntry(x, off, (JSAccess)a);
       symbolTable.put(x.getValue(), e);
       return a;
+      */
 	   
    }
+
+    public JSAst setOnTopLevel(JSId x){
+    System.err.println("locateOnTopLevel:"+ x.getValue()+" "+stack+ " " +this.offset);
+    JSAccess a = TOP();
+    SymbolEntry e = new SymbolEntry(x, NULL_OFFSET, a);
+    symbolTable.put(x.getValue(),e);
+    return a
+   }
+
+   public JSAst locateOnTopLevel(){
+    System.err.println("locateOnTopLevel "+this.ruleName);
+    SymbolEntry e = symbolTable.get(this.ruleName.getValue());
+    if(e!=null)return e.getAccess();
+    return setOnTopLevel(this.ruleName);
+   }
+
    public SymbolEntry resetAccess(JSId x, JSAccess a){
       SymbolEntry e = new SymbolEntry(x, NULL_OFFSET, a);
       symbolTable.put(x.getValue(), e);
@@ -68,6 +119,15 @@ public class Compiler extends PajamaBaseVisitor<JSAst> implements Emiter{
    public JSAst compile(ParseTree tree){ 
       return visit(tree);
    }
+
+   public JSAst visitRules(PajamaParser.RulesContext cxt){
+    System.err.println("VisitRules");
+    ctx.RuleStatement().stream()
+                       .forEach((r)->visit(r));
+    ctx.testStatement().stream()
+                       .forEach((r)->visit(r));
+   }
+
    @Override
    public JSAst visitRuleStatement(PajamaParser.RuleStatementContext ctx){
       JSId id = ID(ctx.ID().getText());
@@ -181,11 +241,25 @@ public class Compiler extends PajamaBaseVisitor<JSAst> implements Emiter{
       int restOffset = this.offset;
       if(!stack.empty())
          this.offset = stack.pop();
-      else this.offset = lastOffset;
+      else 
+        this.offset = lastOffset;
       
       JSAst predicateFirstPart = APP(PATLIST, ARGS(ARRAY(args), X));
       JSAst predicateRestPart, predicateComplete;
       if(ctx.pattRestArray() != null){
+        JSAccess slice=SLICE(locate(X),NUM(restOffset));
+        this.push(slice);
+        lastOffset = this.offset;
+        this.offset=0;
+        predicateRestPart=visit(ctx.pattRestArray());
+        this.offset = lastOffset;
+        this.pop();
+        predicateComplete = AND(predicateFirstPart,APP(predicateFirstPart,X));
+        resetAccess(X,slice);
+      }
+      else predicateComplete=predicateFirstPart,
+       return FUNCTION(FORMALS(x),RET(predicateComplete)); 
+        /*
          predicateRestPart = visit(ctx.pattRestArray());
          JSAccess a = SLICE(X, NUM(restOffset));
          resetAccess(X, a);
@@ -194,6 +268,7 @@ public class Compiler extends PajamaBaseVisitor<JSAst> implements Emiter{
       }
       else predicateComplete = predicateFirstPart;
       return FUNCTION(FORMALS(X), RET(predicateComplete));
+      */
    } 
 
     @Override
