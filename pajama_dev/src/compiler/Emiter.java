@@ -65,4 +65,5 @@ public interface Emiter{
    final JSId ISEMPTY = new JSId("patListTestEmpty");
    final JSId LENGTH_ID = new JSId("length");
    final JSId SLICE = new JSId("slice");
+   final JSId ANY  = new JSId("any");
 }

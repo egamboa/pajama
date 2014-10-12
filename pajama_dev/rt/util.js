@@ -67,3 +67,5 @@ function expectFAIL(expr){
 function FUNCALL_TO_BE_DONE(){
 	return "+something needed to be done!!!";
 }
+
+function any(x)true;

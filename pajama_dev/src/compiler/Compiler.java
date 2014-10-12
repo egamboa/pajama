@@ -149,10 +149,24 @@ public class Compiler extends PajamaBaseVisitor<JSAst> implements Emiter{
    public JSAst visitPattEmpty(PajamaParser.PattEmptyContext ctx){
       System.err.println("visitPattEmpty:");
       return EMPTY_PREDICATE();
-   }   
+   } 
+
+   @Override
+   public JSAst visitPattPairOrEmpty(PajamaParser.PattPairOrEmptyContext ctx){
+    System.err.println("visitPattPairOrEmpty");
+    if(ctx.pattPairList()==null)return visit(ctx.pattPairEmpty());
+    return visit(ctx.pattPairList());
+   }  
+
+    @Override
+   public JSAst visitPattPairEmpty(PajamaParser.PattPairEmptyContext ctx){
+    System.err.println("visitPattPairEmpty");
+    return EMPTY_OBJECT_PREDICATE();
+   } 
+
    @Override 
    public JSAst visitPattList(PajamaParser.PattListContext ctx){
-      System.err.println("visitPattList:");
+      System.err.println("visitPattList:"+this.offset + " " + this.stack);
       int lastOffset = this.offset;
       if(this.offset > 0) this.stack.push(this.offset);
       this.offset = 0;
@@ -181,7 +195,35 @@ public class Compiler extends PajamaBaseVisitor<JSAst> implements Emiter{
       else predicateComplete = predicateFirstPart;
       return FUNCTION(FORMALS(X), RET(predicateComplete));
    } 
+
+    @Override
+   public JSAst visitPattPairList(PajamaParser.PattPairListContext ctx){
+    System.err.println("visitPattPairList");
+    List<JSAst> args) = new ArrayList<JSAst>();
+    ctx.pattPair();
+       .stream()
+       .forEach((p)->{
+          JSAst vp = visit(p);
+          if(vp != null) args.add(vp);
+       });
+    return null ;   
+   } 
    
+   @Override
+   public JSAst visitPattPair(PajamaParser.PattPairContext ctx){
+    System.err.println("visitPattPair");
+    JSAst key = vist(ctx.keyPatt());
+    JSAst val = vist(ctx.pattern());
+    return KEY_PATT(key,val);
+   } 
+
+   @Override
+   public JSAst visitKeyPatt(PajamaParser.KeyPattContext ctx){
+    return (ctx.ID()!=null)? ID(ctx.ID().getText())
+                           : STRING(ctx.STRING().getText());
+
+   }
+
    @Override 
    public JSAst visitPArray(PajamaParser.PArrayContext ctx){
       System.err.println("visitPArray:");
@@ -210,15 +252,40 @@ public class Compiler extends PajamaBaseVisitor<JSAst> implements Emiter{
       System.err.println("visitPattRestArray:");
       if(ctx.pattArray()!=null)
         return visit(ctx.pattArray());
+      /*
       JSId id = ID(ctx.ID().getText());
       locate(id);
       return  FUNCTION(FORMALS(X), RET(TRUE));
+      */
+      return visit(ctx.pattRestId());
    }
+
+   @Override 
+   public JSAst visitPattRestId(PajamaParser.PattRestIdContext ctx){
+    System.err.println("visitPattRestId:");
+    JSId id = ID(ctx.ID().getText());
+    locate(id);
+    return ANY;
+   }
+
+    @Override 
+   public JSAst visitPatUnderscore(PajamaParser.PatUnderscoreContext ctx){
+    System.err.println("visitPatUnderscore:");
+    return ANY;
+   }
+
+    @Override 
+   public JSAst visitWhenPatt(PajamaParser.WhenPattContext ctx){
+    System.err.println("visitWhenPatt:");
+    return FUNCTION(FORMALS(X), RET(visit(ctx.expr())));
+   }
+
    @Override 
    public JSAst visitPId(PajamaParser.PIdContext ctx){
       JSId id = ID(ctx.ID().getText());
 	  locate(id);
-	  return FUNCTION(FORMALS(X), RET(TRUE));
+	  //return FUNCTION(FORMALS(X), RET(TRUE));
+    return ANY;
    }
    //------------------------------------------------------------
    
