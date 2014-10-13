@@ -69,3 +69,5 @@ function FUNCALL_TO_BE_DONE(){
 }
 
 function any(x)true;
+
+function unshift(a, x){a.unshift(x);return a;}

@@ -43,7 +43,7 @@ public class Compiler extends PajamaBaseVisitor<JSAst> implements Emiter{
    JSId ruleName;
    
   public JSAst locatePatternId(JSId x){
-    System.err.println("licatePatternId:" + x.getValue()+" "+stack+ " " +this.offset);
+    System.err.println("locatePatternId:" + x.getValue()+" "+stack+ " " +this.offset);
     if(this.offset < 0){
       return locateOnTopLevel();
     }
@@ -124,8 +124,6 @@ public class Compiler extends PajamaBaseVisitor<JSAst> implements Emiter{
     System.err.println("VisitRules");
     ctx.RuleStatement().stream()
                        .forEach((r)->visit(r));
-    ctx.testStatement().stream()
-                       .forEach((r)->visit(r));
    }
 
    @Override
@@ -168,7 +166,7 @@ public class Compiler extends PajamaBaseVisitor<JSAst> implements Emiter{
    @Override
    public JSAst visitCaseRule(PajamaParser.CaseRuleContext ctx){
       symbolTable = new Hashtable<String, SymbolEntry>();
-  	  stack = new Stack<Integer>();
+  	  stack = new Stack<JSAst>();
   	  this.offset = -1;
 	  
       JSAst p = visit(ctx.pattern());
@@ -258,7 +256,7 @@ public class Compiler extends PajamaBaseVisitor<JSAst> implements Emiter{
         resetAccess(X,slice);
       }
        else predicateComplete=predicateFirstPart;
-       return FUNCTION(FORMALS(x),RET(predicateComplete)); 
+       return FUNCTION(FORMALS(X),RET(predicateComplete)); 
    } 
 
     @Override

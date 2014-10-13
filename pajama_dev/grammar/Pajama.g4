@@ -17,7 +17,7 @@ caseRule         	: 'case' pattern '->' expr  ;
 pattern  			:   pattInit(pattRest)? 
            				| '(' pattern ')'
 ;
-pattInit 			: ANY 			#Any
+pattInit 			: ANY 			#PatUnderscore
 					 | ID  			#PId
                      | pattArray  	#PArray
 					 | pattObject 	#PObject
@@ -35,7 +35,7 @@ pattList 			: pattern (',' pattern)* ( '|' pattRestArray)?
 ;
 pattEmpty 			: 
 ;
-pattRestArray		: pattArray | ID
+pattRestArray		: ID  		#PattRestId
 ;
 
 pattPairOrEmpty 	: pattPairEmpty | pattPairList
@@ -56,7 +56,7 @@ pattConstant       	:  NUMBER  #PatNum
 // EXPRESSION
 arrayExpr  			: '[' args? ']';
 object   			: '{' pairs? '}';
-pairs    			: pair (',' pair)* #PattPairList;
+pairs    			: pair (',' pair)*;
 pair     			: key ':' expr #KeyPatt;
 key      			: STRING | ID;
 
@@ -77,7 +77,7 @@ arithSingle    		:  '-' arithOperation			#DecExpr
                    	 | '(' expr ')'					#ParExpr
 		           	 | arithSingle ('.' ID)+ 		#ObjectAccess
 				   	 | idSingle 					#idExpr
-				   	 | ObjectExpr 						#ObjectExpr
+				   	 | object    					#ObjectExpr
 		           	 | constant 					#ConstantExpr
 ;
 
@@ -100,6 +100,7 @@ fragment INTEGER : [0-9]+ ;
 STRING : ('"' (~'"')* '"' );
 ID : [a-zA-Z][a-zA-Z_0-9]*;
 ANY : '_';
+
 // IGNORE
 CS : '//' .*? '\r'?'\n' -> skip;
 CSB : '/*' .*? '*/' -> skip;

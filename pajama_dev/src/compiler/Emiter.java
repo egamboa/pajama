@@ -53,17 +53,24 @@ public interface Emiter{
    default JSStatementFuncall STATEMENT_FUNCALL(JSAst fun, List<JSAst> args){return new JSStatementFuncall(fun, args);}
    default JSAst TO_BE_DONE(String msg){return ID(msg+"()");}
    default JSAst EMPTY_PREDICATE(){return FUNCTION(FORMALS(X), RET(APP(ISEMPTY, X)));}
+   default JSAst EMPTY_OBJECT_PREDICATE(){return FUNCTION(FORMALS(X), RET(APP(ISEMPTY_OBJECT, X)));}
    default JSOAccess SLICE(JSAst a, JSAst n){ return new JSOAccess(a, SLICE,  ARGS(n)); }
+   default JSAccess TOP(){return TOP_ACCESS;}
+
+   final JSId ANY  = new JSId("any");
    final JSBool TRUE = new JSBool(true);
    final JSBool FALSE = new JSBool(false);
+   final JSNum ZERO = new JSNum(0);
    final JSId X = new JSId("x");
    final JSId N = new JSId("n");
    final JSId C = new JSId("c");
+   final JSId ARGUMENTS = new JSId("arguments");
    final JSId FAIL = new JSId("fail");
    final JSNum NULL_OFFSET = new JSNum(-1);
    final JSId PATLIST = new JSId("patListTest");
    final JSId ISEMPTY = new JSId("patListTestEmpty");
+   final JSId ISEMPTY_OBJECT = new JSId("patObjectTestEmpty");
    final JSId LENGTH_ID = new JSId("length");
    final JSId SLICE = new JSId("slice");
-   final JSId ANY  = new JSId("any");
+   final JSAccess TOP_ACCESS = new JSAccess(ARGUMENTS, ZERO);
 }
