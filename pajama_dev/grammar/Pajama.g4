@@ -27,7 +27,7 @@ pattRest 			: '@' ID 		#AtPatt
                      |'when' expr 	#WhenPatt
 ;
 pattArray         	: '[' pattListOrEmpty ']'; 
-pattObject        	: '{' pattPair '}'
+pattObject        	: '{' pattPairOrEmpty '}'
 ;
 pattListOrEmpty 	: pattEmpty | pattList
 ;
@@ -35,11 +35,16 @@ pattList 			: pattern (',' pattern)* ( '|' pattRestArray)?
 ;
 pattEmpty 			: 
 ;
-
 pattRestArray		: pattArray | ID
 ;
 
-pattPair 			: key ':' pattern;
+pattPairOrEmpty 	: pattPairEmpty | pattPairList
+;
+pattPairEmpty :
+;
+pattPairList : pattPair (',' pattPair)*
+;
+pattPair     : key ':' pattern;
 
 pattConstant       	:  NUMBER  #PatNum
                    	 | STRING  #PatString
@@ -48,13 +53,13 @@ pattConstant       	:  NUMBER  #PatNum
 				     | 'null'  #NullPat
 ;
 
-params   			: '[' args ']';
+// EXPRESSION
+arrayExpr  			: '[' args? ']';
 object   			: '{' pairs? '}';
-pairs    			: pair (';' pair)*;
-pair     			: key ':' expr;
+pairs    			: pair (',' pair)* #PattPairList;
+pair     			: key ':' expr #KeyPatt;
 key      			: STRING | ID;
 
-// EXPRESSION
 expr      			: relMonom ('||' relMonom)*; //Pulga? ||
 relMonom  			: relOperation ('&&' relOperation)*
 ;
@@ -67,15 +72,13 @@ relOperator 		: ('>' | '<' | '==' | '<=' | '>=' | '!=');
 arithOperation 		: arithMonom (operAddPlus arithMonom)*;
 arithMonom     		: arithSingle (('*' | '/') arithSingle)*;
 arithSingle    		:  '-' arithOperation			#DecExpr
-					 | funInit					 	#FunCallExpr
+					 | idSingle '(' args? ')'    	#FunCallExpr
+					 | arrayExpr					#ArrayCall
                    	 | '(' expr ')'					#ParExpr
 		           	 | arithSingle ('.' ID)+ 		#ObjectAccess
 				   	 | idSingle 					#idExpr
-				   	 | object 						#ObjectExpr
+				   	 | ObjectExpr 						#ObjectExpr
 		           	 | constant 					#ConstantExpr
-;
-funInit : idSingle '(' args? ')'
-		//| idSingle '('  ')'
 ;
 
 idSingle : ID
@@ -88,7 +91,7 @@ constant        :    NUMBER  #ExprNum
 				   | 'true'  #ExprTrue
 				   | 'false' #ExprFalse
 				   | 'null'  #ExprNull
-				   ;
+;
 args   :  expr (',' expr)*;
 
 // LEXER
