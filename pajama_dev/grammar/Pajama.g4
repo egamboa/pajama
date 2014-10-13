@@ -75,7 +75,7 @@ arithSingle    		:  '-' arithOperation			#DecExpr
 		           	 | constant 					#ConstantExpr
 ;
 funInit : idSingle '(' args? ')'
-		| idSingle '(' pattArray? ')'
+		//| idSingle '('  ')'
 ;
 
 idSingle : ID
