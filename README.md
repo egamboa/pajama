@@ -12,6 +12,7 @@ Pendientes:
 - [x] Casa01_5.js
 - [x] Casa01_7.js
 - [x] JSId Error to JSPoint
+- [x] g(x) para el caso01_7
 - [ ] Falta el _ para compartamiento default
 - [ ] Falta el pipe para acceso de arrays
-- [ ] g(x) para el caso01_7
+- [ ] FunInit para caso02 que acepte cosas como factorialCola([n-1, n*r])

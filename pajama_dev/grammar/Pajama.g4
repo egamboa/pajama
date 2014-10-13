@@ -96,7 +96,7 @@ NUMBER : INTEGER ('.' INTEGER)? ;
 fragment INTEGER : [0-9]+ ;
 STRING : ('"' (~'"')* '"' );
 ID : [a-zA-Z][a-zA-Z_0-9]*;
-ANY : '_' -> skip;
+ANY : '_';
 // IGNORE
 CS : '//' .*? '\r'?'\n' -> skip;
 CSB : '/*' .*? '*/' -> skip;
