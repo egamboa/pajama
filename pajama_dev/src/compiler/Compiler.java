@@ -226,7 +226,7 @@ public class Compiler extends PajamaBaseVisitor<JSAst> implements Emiter{
    public JSAst visitPattList(PajamaParser.PattListContext ctx){
       System.err.println("visitPattList:"+this.offset + " " + this.stack);
       int lastOffset = this.offset;
-      if(this.offset > 0) this.stack.push(this.offset);
+      if(this.offset > 0) this.push(this.offset);
       this.offset = 0;
       List<JSAst> args = new ArrayList<JSAst>();
       ctx.pattern()
@@ -237,8 +237,8 @@ public class Compiler extends PajamaBaseVisitor<JSAst> implements Emiter{
            this.offset++;
          });
       int restOffset = this.offset;
-      if(!stack.empty())
-         this.offset = stack.pop();
+      if(!this.isEmpty() && ((this.stack.peek() instanceof JSNum)))
+         this.offset = ((JSNum)this.pop()).getValue();
       else 
         this.offset = lastOffset;
       

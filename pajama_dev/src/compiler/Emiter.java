@@ -73,4 +73,5 @@ public interface Emiter{
    final JSId LENGTH_ID = new JSId("length");
    final JSId SLICE = new JSId("slice");
    final JSAccess TOP_ACCESS = new JSAccess(ARGUMENTS, ZERO);
+   final JSKey KEY_PATT = new JSKey(ID);
 }
