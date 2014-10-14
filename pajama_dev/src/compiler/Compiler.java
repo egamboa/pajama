@@ -75,19 +75,6 @@ public class Compiler extends PajamaBaseVisitor<JSAst> implements Emiter{
       SymbolEntry e = new SymbolEntry(x, off, (JSAccess)a);
       symbolTable.put(x.getValue(), e);
       return a;
-      
-      /*for(Integer k : stack){
-        rstack.add(NUM(k));
-      }
-      JSAst a = x;
-      JSNum off = NUM(this.offset);
-      for(JSAst k : rstack)
-        a = ACCESS(a, k);
-      a = ACCESS(a, off);
-      SymbolEntry e = new SymbolEntry(x, off, (JSAccess)a);
-      symbolTable.put(x.getValue(), e);
-      return a;
-      */
 	   
    }
 
@@ -132,6 +119,7 @@ public class Compiler extends PajamaBaseVisitor<JSAst> implements Emiter{
    @Override
    public JSAst visitRuleStatement(PajamaParser.RuleStatementContext ctx){
       JSId id = ID(ctx.ID().getText());
+      this.ruleName = id;
   	  JSAst formal = visit(ctx.formal());
   	  JSAst body = visit(ctx.ruleBody());
   	  JSAst frule = FUNCTION(id, formal, RET(APP(body, formal )));
@@ -176,7 +164,7 @@ public class Compiler extends PajamaBaseVisitor<JSAst> implements Emiter{
   	  JSAst e = visit(ctx. expr());
   	  // function(n, c)if(p(n)) return e; else return c(n);
   	  return FUNCTION(FORMALS(N, C),
-	                   IF(APP(p, N), RET(e), RET(APP(C, N))));
+	                   IF(APP(p, N), RET(APP(FUNCTION(FORMALS(X), RET(e)), N)),RET(APP(C, N))));
    }
    @Override 
    public JSAst visitPattern(PajamaParser.PatternContext ctx){
@@ -188,8 +176,8 @@ public class Compiler extends PajamaBaseVisitor<JSAst> implements Emiter{
    }
    @Override 
    public JSAst visitPatNum(PajamaParser.PatNumContext ctx){
-      JSAst n = NUM(Integer.valueOf(ctx.NUMBER().getText()));
-	  return FUNCTION(FORMALS(X), RET(EQ(locate(X), n)));
+    JSAst n = NUM(Integer.valueOf(ctx.NUMBER().getText()));
+	  return FUNCTION(FORMALS(X), RET(EQ(locatePatternId(X), n)));
    }
    @Override
    public JSAst visitExprString(PajamaParser.ExprStringContext ctx){
@@ -379,6 +367,20 @@ public class Compiler extends PajamaBaseVisitor<JSAst> implements Emiter{
           args.add(visit(arg));
         });
     return FUNCALL(fun, args);
+   }
+   @Override
+   public JSAst visitArrayExpr(PajamaParser.ArrayExprContext ctx){
+    System.err.println("visitArrayExpr");
+      List<JSAst> args = new ArrayList<JSAst>();
+      //IF para 0 args
+      ctx.args()
+         .expr()
+         .stream()
+         .forEach((p)->{
+           JSAst vp = visit(p);
+           if(vp != null) args.add(vp);
+         });
+      return ARRAY(args);
    }
    @Override
    public JSAst visitExprNum(PajamaParser.ExprNumContext ctx){
