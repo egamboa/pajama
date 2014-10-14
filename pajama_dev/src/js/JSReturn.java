@@ -9,8 +9,7 @@ public class JSReturn implements JSAst{
    }
    @Override
    public void genCode(PrintStream out){
-   
-      out.print("return ");
+     out.print("return ");
 	  e.genCode(out);
 	  out.print(";");
    }

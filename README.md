@@ -16,3 +16,10 @@ Pendientes:
 - [ ] Falta el _ para compartamiento default
 - [ ] Falta el pipe para acceso de arrays
 - [ ] FunInit para caso02 que acepte cosas como factorialCola([n-1, n*r])
+
+
+Compilando en MAC:
+
+antlr4 -visitor  -o src/antlr -package pajama.compile -no-listener grammar/Pajama.g4 $*
+javac -d lib src/*/*.java
+java -cp .:lib:$CLASSPATH pajama.compile.Pajamac cases/$1
