@@ -6,7 +6,7 @@ rule factorialCola(a){
 }
 
 rule factorial(n){
-      case n when n>=0 -> factorialCola([n, 1])
+      case n when n>0 -> factorialCola([n, 1])
 	| case n -> 0
 }
 
