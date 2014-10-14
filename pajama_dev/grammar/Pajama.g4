@@ -35,7 +35,10 @@ pattList 			: pattern (',' pattern)* ( '|' pattRestArray)?
 ;
 pattEmpty 			: 
 ;
-pattRestArray		: ID  		#PattRestId
+pattRestArray		:  pattArray
+					 | pattRestId
+;
+pattRestId 			: ID
 ;
 
 pattPairOrEmpty 	: pattPairEmpty | pattPairList
@@ -45,6 +48,8 @@ pattPairEmpty :
 pattPairList : pattPair (',' pattPair)*
 ;
 pattPair     : keyPatt ':' pattern;
+
+keyPatt		 : STRING | ID;
 
 pattConstant       	:  NUMBER  #PatNum
                    	 | STRING  #PatString
@@ -57,8 +62,8 @@ pattConstant       	:  NUMBER  #PatNum
 arrayExpr  			: '[' args? ']';
 object   			: '{' pairs? '}';
 pairs    			: pair (',' pair)*;
-pair     			: keyPatt ':' expr;
-keyPatt    			: STRING | ID;
+pair     			: key ':' expr;
+key    				: STRING | ID;
 
 expr      			: relMonom ('||' relMonom)*; //Pulga? ||
 relMonom  			: relOperation ('&&' relOperation)*

@@ -120,10 +120,13 @@ public class Compiler extends PajamaBaseVisitor<JSAst> implements Emiter{
       return visit(tree);
    }
 
-   public JSAst visitRules(PajamaParser.RulesContext cxt){
+   public JSAst visitRules(PajamaParser.RulesContext ctx){
     System.err.println("VisitRules");
-    ctx.RuleStatement().stream()
+    ctx.ruleStatement().stream()
                        .forEach((r)->visit(r));
+    ctx.testStatement().stream()
+                       .forEach((r)->visit(r));
+    return null;
    }
 
    @Override
@@ -275,8 +278,8 @@ public class Compiler extends PajamaBaseVisitor<JSAst> implements Emiter{
    @Override
    public JSAst visitPattPair(PajamaParser.PattPairContext ctx){
     System.err.println("visitPattPair");
-    JSAst key = vist(ctx.keyPatt());
-    JSAst val = vist(ctx.pattern());
+    JSAst key = visit(ctx.keyPatt());
+    JSAst val = visit(ctx.pattern());
     return KEY_PATT(key,val);
    } 
 
@@ -367,7 +370,7 @@ public class Compiler extends PajamaBaseVisitor<JSAst> implements Emiter{
    }
    @Override
    public JSAst visitFunCallExpr(PajamaParser.FunCallExprContext ctx){
-    JSAst fun = visit(ctx.arithSingle());
+    JSAst fun = visit(ctx.idSingle());
     List<JSAst> args = new ArrayList<JSAst>();
     //IF(args != NULL)
     ctx.args().expr()

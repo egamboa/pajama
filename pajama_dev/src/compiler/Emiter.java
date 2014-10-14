@@ -6,6 +6,9 @@ public interface Emiter{
    default JSNum NUM(int value){ return new JSNum(value);}
    default JSString STRING(String value){return new JSString(value);} 
    default JSId  ID(String value){return new JSId(value);}
+   default JSKeyPatt KEY_PATT(JSAst key, JSAst val){
+            return new JSKeyPatt(key, val);
+   }
    default JSFunction FUNCTION(List<JSAst> formals, JSAst body){
            return new JSFunction(formals, body);
    }
@@ -73,5 +76,4 @@ public interface Emiter{
    final JSId LENGTH_ID = new JSId("length");
    final JSId SLICE = new JSId("slice");
    final JSAccess TOP_ACCESS = new JSAccess(ARGUMENTS, ZERO);
-   final JSKey KEY_PATT = new JSKey(ID);
 }

@@ -12,6 +12,4 @@ public class JSStatementFuncall extends  JSFuncall{
 	  out.print(";");
 	  
    }
-   
-   
 }
