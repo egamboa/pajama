@@ -57,7 +57,7 @@ public class Compiler extends PajamaBaseVisitor<JSAst> implements Emiter{
       System.err.println("locate:"+ x.getValue()+" "+stack+ " " +this.offset);
 
       if(this.offset<0) return x;
-      SymbolEntry entry = symbolTable.get(x.getValue());
+
       List<JSAst> rstack =  new ArrayList<>();
       for(JSAst k : stack){
         rstack.add(k);
@@ -245,7 +245,7 @@ public class Compiler extends PajamaBaseVisitor<JSAst> implements Emiter{
       else 
         this.offset = lastOffset;
       
-      JSAst predicateFirstPart = APP(PATLIST, ARGS(ARRAY(args), X));
+      JSAst predicateFirstPart = APP(PATLIST, ARGS(ARRAY(args), locate(X)));
       JSAst predicateRestPart, predicateComplete;
       if(ctx.pattRestArray() != null){
         JSAccess slice=SLICE(locate(X),NUM(restOffset));
@@ -255,7 +255,7 @@ public class Compiler extends PajamaBaseVisitor<JSAst> implements Emiter{
         predicateRestPart=visit(ctx.pattRestArray());
         this.offset = lastOffset;
         this.pop();
-        predicateComplete = AND(predicateFirstPart,APP(predicateFirstPart,X));
+        predicateComplete = AND(predicateFirstPart,APP(predicateRestPart,X));
         resetAccess(X,slice);
       }
        else predicateComplete=predicateFirstPart;
@@ -325,8 +325,8 @@ public class Compiler extends PajamaBaseVisitor<JSAst> implements Emiter{
 
    @Override 
    public JSAst visitPId(PajamaParser.PIdContext ctx){
-      JSId id = ID(ctx.ID().getText());
-	  locate(id);
+    JSId id = ID(ctx.ID().getText());
+	  locatePatternId(id);
 	  //return FUNCTION(FORMALS(X), RET(TRUE));
     return ANY;
    }
