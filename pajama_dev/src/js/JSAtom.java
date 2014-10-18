@@ -1,6 +1,6 @@
 package pajama.js;
 import java.io.*;
-public class JSAtom<T> extends JSPrintable{
+public class JSAtom<T> implements JSAst{
    private T value;
    public T getValue(){return this.value;}
    
