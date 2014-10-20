@@ -1,7 +1,7 @@
 package pajama.js;
 import java.io.*;
 public class JSAccess extends  JSPrintable{
-   private JSAst left, right;
+   protected JSAst left, right;
    public JSAst getLeft(){return this.left;}
    public JSAst getRight(){return this.right;}
    public JSAccess setLeft(JSAst left){
