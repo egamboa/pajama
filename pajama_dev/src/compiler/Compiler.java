@@ -53,27 +53,49 @@ public class Compiler extends PajamaBaseVisitor<JSAst> implements Emiter{
     return a;
   } 
 
-   public JSAst locate(JSId x){
-      System.err.println("locate:"+ x.getValue()+" "+stack+ " " +this.offset);
+   
 
-      if(this.offset<0) return x;
+
+
+
+
+
+
+
+
+
+      public JSAst locate(JSId x){
+      System.err.println("locate IN:"+ x.getValue()+" "+stack+ " " +this.offset);
+
+      if(this.offset<0 && this.isEmpty()) return x;
 
       List<JSAst> rstack =  new ArrayList<>();
       for(JSAst k : stack){
         rstack.add(k);
       }
       JSAst a = x;
-      JSNum off = NUM(this.offset);
+      JSNum off = (this.offset>=0)?NUM(this.offset): NULL_OFFSET;
+
       for(JSAst k : rstack){
-        if(k instanceof JSAccess){
-          JSAccess na = (JSAccess)k;
+        System.err.println("locate LOPP: "+x.getValue()+" "+k);
+        if(k instanceof JSOAccess){
+          System.err.println("locate OAccess");
+          JSOAccess na = (JSOAccess)k;
           a = na.setLeft(a);
-        }
-        else a =ACCESS(a,k);
+        } else if( k instanceof JSAccess){
+            System.err.println("locate Access "+k);
+            JSAccess na = (JSAccess) k;
+            a  = na.setLeft(a);
+        } else a =ACCESS(a,k);
       }
-      a = ACCESS(a, off);
+      System.err.println("locate MIDDLE: "+x.getValue()+ " "+a);
+      if(this.offset>=0){
+        a = ACCESS(a, off); 
+      }
+
       SymbolEntry e = new SymbolEntry(x, off, (JSAccess)a);
       symbolTable.put(x.getValue(), e);
+      System.err.println("locate OUT: "+x.getValue()+" "+stack+" "+this-offset+" "+a);
       return a;
 	   
    }
@@ -84,8 +106,8 @@ public class Compiler extends PajamaBaseVisitor<JSAst> implements Emiter{
     SymbolEntry e = new SymbolEntry(x, NULL_OFFSET, a);
     symbolTable.put(x.getValue(),e);
     return a;
-   }
 
+   }
    public JSAst locateOnTopLevel(){
     System.err.println("locateOnTopLevel "+this.ruleName);
     SymbolEntry e = symbolTable.get(this.ruleName.getValue());
@@ -111,6 +133,7 @@ public class Compiler extends PajamaBaseVisitor<JSAst> implements Emiter{
     System.err.println("VisitRules");
     ctx.ruleStatement().stream()
                        .forEach((r)->visit(r));
+                       
     ctx.testStatement().stream()
                        .forEach((r)->visit(r));
     return null;

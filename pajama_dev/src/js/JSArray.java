@@ -16,4 +16,4 @@ public class JSArray implements JSAst{
 	  if(this.args != null) genCode(out, this.args);
 	  out.print("]");
    }
-}
+} 
