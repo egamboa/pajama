@@ -4,8 +4,8 @@ function times13(a) {
     return (function(x) {
         return (function(n, c) {
             if ((function(x) {
-                    return (patListTest)([any, any, any], x);
-                })(n)) return (function(x) {
+                return (patListTest)([any, any, any], x);
+            })(n)) return (function(x) {
                 return x[2];
             })(n);
             else return (c)(n);
