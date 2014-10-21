@@ -6,27 +6,36 @@ function MyException(msg, fail){
 
 MyException.prototype.toString = function()this.msg;
 
+
 function patListTest(lp, n){
-	if (n.length != lp.length) {
-		return false;
-	}
-	if(!Array.isArray(n)){
-		return false;
-	}
-	if(!lp.reduce(function(z, p) z && p(n), true)){
-		return false;
-	}
-	return true;
-}
+
+
+
+	
+	return Array.isArray(n)
+			&& n.length == lp.length
+			&& lp.reduce(function(z, p) z && p(n), true);
+};
 
 
 function patListTestEmpty(x)
 	Array.isArray(x) && x.length == 0;
 
+function patObjTest(lp, o){
 
-function fail(){
-	throw new java.lang.Exception("Pattern matching failed");
+	if(typeof o !='object') return false;
+	var keys = Object.keys(lp);
+	return keys.reduce(function(z, k)z&&lp[k](o), true);
 }
+function patObjectTestEmpty(o){
+	return typeof o =='object' && Object.keys(o).length==0;
+}
+var FAIL = new java.lang.Exception("Pattern matching Exception");
+function fail(){
+	throw FAIL;
+}
+
+function any(x)true;
 
 
 function expectEQ(expr, r){

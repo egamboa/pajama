@@ -6,8 +6,8 @@ public interface Emiter{
    default JSNum NUM(int value){ return new JSNum(value);}
    default JSString STRING(String value){return new JSString(value);} 
    default JSId  ID(String value){return new JSId(value);}
-   default JSKeyPatt KEY_PATT(JSAst key, JSAst val){
-            return new JSKeyPatt(key, val);
+   default JSAst KEY_PATT(JSAst key, JSAst val){
+            return new JSPair(key, val);
    }
    default JSFunction FUNCTION(List<JSAst> formals, JSAst body){
            return new JSFunction(formals, body);
@@ -57,7 +57,9 @@ public interface Emiter{
    default JSAst TO_BE_DONE(String msg){return ID(msg+"()");}
    default JSAst EMPTY_PREDICATE(){return FUNCTION(FORMALS(X), RET(APP(ISEMPTY, X)));}
    default JSAst EMPTY_OBJECT_PREDICATE(){return FUNCTION(FORMALS(X), RET(APP(ISEMPTY_OBJECT, X)));}
+   default JSObject OBJECT(List<JSAst> pairs){return new JSObject(pairs);}
    default JSOAccess SLICE(JSAst a, JSAst n){ return new JSOAccess(a, SLICE,  ARGS(n)); }
+   default JSOAccess SLICE(JSAst a, JSAst n, JSAst m){ return new JSOAccess(a, SLICE,  ARGS(n, m)); }
    default JSAccess TOP(){return TOP_ACCESS;}
 
    final JSId ANY  = new JSId("any");
@@ -73,7 +75,9 @@ public interface Emiter{
    final JSId PATLIST = new JSId("patListTest");
    final JSId ISEMPTY = new JSId("patListTestEmpty");
    final JSId ISEMPTY_OBJECT = new JSId("patObjectTestEmpty");
+   final JSId PATOBJTEST = new JSId("patObjTest");
    final JSId LENGTH_ID = new JSId("length");
    final JSId SLICE = new JSId("slice");
+   final JSAst EMPTY_LIST = new JSArray();
    final JSAccess TOP_ACCESS = new JSAccess(ARGUMENTS, ZERO);
 }

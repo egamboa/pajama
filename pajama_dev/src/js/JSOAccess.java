@@ -9,7 +9,7 @@ public class JSOAccess extends  JSAccess{
    }
    @Override
    public JSAccess setLeft(JSAst left){
-      return new JSOAccess(left,(JSId)this.right, args);
+      return new JSOAccess(left, (JSId)this.right, args);
    }
    public JSOAccess(JSAst left, JSId right){
       super(left, right);
