@@ -446,12 +446,14 @@ public JSAst locate(JSId x){
    public JSAst visitOperAddPlus(PajamaParser.OperAddPlusContext ctx){
       return ID(ctx.op.getText());
    }
+   
    /*
    @Override
    public JSAst visitRelOperator(PajamaParser.RelOperatorContext ctx){
       return ID(ctx.op.getText());
    }
-*/
+   */
+   
    @Override
    public JSAst visitFunCallExpr(PajamaParser.FunCallExprContext ctx){
     JSAst fun = visit(ctx.idSingle());
