@@ -1,7 +1,7 @@
 grammar Pajama;
 // loriacarlos@gmail.com EIF400 II-2014
 // START
-rules : ruleStatement+ (testStatement ';')* ;
+rules : ruleStatement+ (testStatement ';'?)* ;
 
 // RULE
 ruleStatement 		: 'rule' ID formal '{' ruleBody  '}'
@@ -26,31 +26,30 @@ pattInit 			: ANY 			#PatUnderscore
 pattRest 			: '@' ID 		#AtPatt
                      |'when' expr 	#WhenPatt
 ;
-pattArray         	: '[' pattListOrEmpty ']'; 
+pattArray         	: '[' pattListOrEmpty ']'
+;
 pattObject        	: '{' pattPairOrEmpty '}'
 ;
 pattListOrEmpty 	: pattEmpty | pattList
+;
+pattPairOrEmpty 	: pattPairEmpty | pattPairList
 ;
 pattList 			: pattern (',' pattern)* ( '|' pattRestArray)?
 ;
 pattEmpty 			: 
 ;
-pattRestArray		:  pattArray
-					 | pattRestId
-;
-pattRestId 			: ID
-;
-
-pattPairOrEmpty 	: pattPairEmpty | pattPairList
-;
-pattPairEmpty :
+pattPairEmpty 		:
 ;
 pattPairList : pattPair (',' pattPair)*
 ;
+pattRestArray		:  pattArray | pattRestId
+;
+pattRestId 			: ID
+;
 pattPair     : keyPatt ':' pattern;
 
-keyPatt		 : STRING | ID;
-
+keyPatt		 : STRING | ID
+;
 pattConstant       	:  NUMBER  #PatNum
                    	 | STRING  #PatString
 				   	 | 'true'  #PatTrue
