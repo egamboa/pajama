@@ -447,12 +447,10 @@ public JSAst locate(JSId x){
       return ID(ctx.op.getText());
    }
    
-   /*
    @Override
    public JSAst visitRelOperator(PajamaParser.RelOperatorContext ctx){
       return ID(ctx.op.getText());
    }
-   */
    
    @Override
    public JSAst visitFunCallExpr(PajamaParser.FunCallExprContext ctx){

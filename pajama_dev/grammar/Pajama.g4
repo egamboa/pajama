@@ -72,7 +72,7 @@ relMonom  			: relOperation ('&&' relOperation)*
 relOperation 		:  arithOperation ( relOperator arithOperation)*	#RelOper
                  	 | '!'  relOperation								#NegRelOper
 ;
-relOperator 		: ('>' | '<' | '==' | '<=' | '>=' | '!=');
+relOperator 		: op=('>' | '<' | '==' | '<=' | '>=' | '!=');
 
 arithOperation 		: arithMonom (operAddPlus arithMonom)*;
 arithMonom     		: arithSingle (('*' | '/') arithSingle)*;
