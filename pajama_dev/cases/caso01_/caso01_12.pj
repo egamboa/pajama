@@ -4,9 +4,12 @@ rule foo8(a){
 rule foo9(a){
      case [x|[]] -> true
 }
-rule foo10(a){
-     case [1|x] -> x
-}
+
+//rule foo10(a){
+//     case [1|x] -> x
+//}
+
 rule foo11(a){
      case [1, x when x>0] -> x+1
 }
+
