@@ -1,3 +1,0 @@
-rule foo6(a){
-     case [0,r] -> r
-}

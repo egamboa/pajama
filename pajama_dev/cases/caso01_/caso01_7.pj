@@ -1,3 +1,0 @@
-rule foo7(n){
-     case [x, y] -> 1+x+y+g(x) // expr 1,x,y y g(x) arithMonom
-}
