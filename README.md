@@ -13,9 +13,12 @@ Pendientes:
 - [x] Casa01_7.js
 - [x] JSId Error to JSPoint
 - [x] g(x) para el caso01_7
-- [ ] Falta el _ para compartamiento default
-- [ ] Falta el pipe para acceso de arrays
-- [ ] FunInit para caso02 que acepte cosas como factorialCola([n-1, n*r])
+- [x] Falta el _ para compartamiento default
+- [x] Falta el pipe para acceso de arrays
+- [x] FunInit para caso02 que acepte cosas como factorialCola([n-1, n*r])
+- [ ] Caso 2 Null Pointer Exception pajama.compile.Compiler.visitPId(Compiler.java:385)
+- [ ] Caso 3 Null Pointer Exception pajama.compile.Compiler.visitPattRestId(Compiler.java:363)
+
 
 
 Compilando en MAC:
