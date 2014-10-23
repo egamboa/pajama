@@ -1,0 +1,5 @@
+rule foo(a){
+    case [[x|r], c] -> r+c
+}
+
+expectEQ("foo([[10, 20, 30], [40]])", "20,3040");

@@ -1,0 +1,6 @@
+rule foo9(a){
+  case [x|[]] -> true
+}
+
+expectEQ("foo9([42])", "true");
+expectFAIL("foo9([42, []])");

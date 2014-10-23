@@ -3,3 +3,6 @@ rule times13(a){
    case [x, _, y] -> x*y
    | case _ -> 0
 }
+
+expectEQ("times13([10, 20, 30])", "300");
+expectEQ("times13([10, 20])", "0");

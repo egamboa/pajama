@@ -1,0 +1,6 @@
+rule foo10(a){
+  case [1|x] -> x
+}
+
+expectEQ("foo10([1,2,3,4])", "2,3,4");
+expectEQ("foo10([1])", ""); 

@@ -2,26 +2,31 @@
 
 rule factorialCola(a){
      case [0,r] -> r
-   | case [n,r] -> factorialCola([n-1, n*r])
+   | case [n,r] ->  factorialCola([n-1, n*r])
 }
-
 rule factorial(n){
       case n when n>=0 -> factorialCola([n, 1])
 	| case n -> 0
 }
 
 rule largo(a){
-    case [] -> 0
+      case [] -> 0
     | case [_|r] -> largo(r)+1
 }
 
 rule largoRC(a){
     case [[], c] -> c
-	| case [[_|r], c] -> larRC([r, c+1])
+	| case [[_|r], c] -> largoRC([r, c+1])
 }
-rule largo(a){
+rule largo2(a){
     case a -> largoRC([a, 0])
 }
+
+expectEQ("factorial(5)", "120");
+expectEQ("factorial(-5)", "0");
+expectEQ("largo([1,2,3])", "3");
+expectEQ("largo2([1,2,3])", "3");
+expectFAIL("largo2(2)");
 
 
 

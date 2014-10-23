@@ -1,0 +1,5 @@
+rule foo(a){
+    case [c|[r]] -> r+c
+}
+
+expectEQ("foo([99,[2,3]])", "2,399");

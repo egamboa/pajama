@@ -1,0 +1,7 @@
+rule goo(n){
+  case [x,2] ->x
+}
+
+expectEQ("goo([42, 2])", "42");
+expectFAIL("goo([42, 1])");
+

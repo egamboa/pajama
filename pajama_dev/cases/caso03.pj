@@ -10,3 +10,6 @@ rule sumaRec (a){
         case [] -> 0
 	  | case [x|r] -> x + sumaRec(r)
 }
+
+expectEQ("size([1,2,3,4], 0)", "4");
+expectEQ("sumaRec([1,2,3,4])", "10");

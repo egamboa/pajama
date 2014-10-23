@@ -13,3 +13,5 @@ rule foo11(a){
      case [1, x when x>0] -> x+1
 }
 
+expectEQ("foo9([42])", "true");
+expectFAIL("foo9([42, []])");

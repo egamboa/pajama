@@ -3,3 +3,6 @@ rule sumar(a){
      case [] -> 0
    | case [h|t] -> h + sumar(t)
 }
+
+expectEQ("sumar([1,2,3])", "6");
+expectFAIL("sumar(1)");

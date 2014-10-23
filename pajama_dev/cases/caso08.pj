@@ -1,6 +1,9 @@
 // Agrega un property a un objeto solo si esta vacio. Acceso de array a object
 
-rule addProperty([o, k, v]){
-     case [{}, _] -> o[k] = v
-   | case  _  -> o
+rule addProperty(a){
+     case [{} @ o , k, v] -> o[k] = v
+   | case  _  -> false
 }
+
+expectEQ('addProperty([{}, "age", 21])',"21");
+expectEQ('addProperty([{age:10}, "age", 21])',"false");

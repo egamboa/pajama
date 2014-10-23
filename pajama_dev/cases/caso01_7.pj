@@ -1,0 +1,5 @@
+rule foo(n){
+   case [x, y, g] -> 1+x+y+g(x) 
+}
+
+expectEQ("foo([2, 3, function(x){return x+2;}])", "10");

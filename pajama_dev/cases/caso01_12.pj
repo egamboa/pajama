@@ -1,0 +1,24 @@
+rule foo8(a){
+  case [] -> true
+}
+rule foo9(a){
+  case [x|[]] -> true
+}
+rule foo10(a){
+  case [1|x] -> x
+}
+rule foo11(a){
+  case [1, x when x>0]  -> x+1
+}
+
+expectEQ("foo8([])", "true");
+expectFAIL("foo8([42])");
+
+expectEQ("foo9([42])", "true");
+expectFAIL("foo9([42, []])");
+
+expectEQ("foo10([1,2,3,4])", "2,3,4");
+expectEQ("foo10([1])", "");
+
+expectEQ("foo11([1, 41])", "42");
+expectFAIL("foo11([1, 0])");

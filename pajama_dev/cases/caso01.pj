@@ -3,3 +3,6 @@ rule caso1(n){
      case 0 -> false
    | case 1 -> true
 }
+expectEQ("caso1(0)", "false");
+expectEQ("caso1(1)", "true");
+expectFAIL("caso1(2)");

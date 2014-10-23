@@ -1,0 +1,6 @@
+rule foo11(a){
+  case [1, x when x>0]  -> x+1
+}
+
+expectEQ("foo11([1, 41])", "42");
+expectFAIL("foo11([1, 0])");

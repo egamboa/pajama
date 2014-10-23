@@ -1,0 +1,6 @@
+rule foo(n){
+     case r -> r
+}
+
+expectEQ("foo(42)", "42");
+expectEQ("foo([42])", "42");
