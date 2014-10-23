@@ -359,8 +359,6 @@ public JSAst locate(JSId x){
     System.err.println("visitPattRestId:");
     JSId id = ID(ctx.ID().getText());
     locatePatternId(X);
-    SymbolEntry entry = symbolTable.get(X.getValue());
-    symbolTable.put(id.getValue(), entry);
     return ANY;
    }
 
@@ -381,8 +379,6 @@ public JSAst locate(JSId x){
     JSId id = ID(ctx.ID().getText());
     System.err.println("visitPId:"+id.getValue()+" "+this.offset+" "+ this.stack);
 	  locatePatternId(X);
-    SymbolEntry entry = symbolTable.get(X.getValue());
-    symbolTable.put(id.getValue(), entry);
     return ANY;
    }
    //------------------------------------------------------------
