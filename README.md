@@ -18,6 +18,8 @@ Pendientes:
 - [x] FunInit para caso02 que acepte cosas como factorialCola([n-1, n*r])
 - [ ] Caso 2 Null Pointer Exception pajama.compile.Compiler.visitPId(Compiler.java:385)
 - [ ] Caso 3 Null Pointer Exception pajama.compile.Compiler.visitPattRestId(Compiler.java:363)
+- [ ] Caso 01_7 case_result/casos01_/caso01_7.js:9 TypeError: [object Array] is not a function
+- [ ] Caso 10 Null pointer
 
 
 
